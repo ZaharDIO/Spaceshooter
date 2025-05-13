@@ -13,8 +13,11 @@ contador = 0
 decidi_direcao = false
 
 //Timer
-timer = game_get_speed(gamespeed_fps) * .5
+timer = game_get_speed(gamespeed_fps) * 2
 timer_carregando = 0
+
+inicia_squash_stretch()
+inicia_shadercolor()
 
 //Máquina de estado
 //State Machine
@@ -55,24 +58,26 @@ maquina_de_estado = function(){
 		break
 		
 		case "Atirando":{
+			//Som do tiro
+			efeito_som(sfx_laser2, .1)
+			//Repetindo a criação do tiro 3x
 			repeat(3){
 				//Fazer ele checar se o player existe
 				if (instance_exists(obj_player)){
 					//Encontrando a direção do player
 					var _dir = point_direction(x, y, obj_player.x, obj_player.y)
+									
+					//Variável do tiro
+					var _tiro = instance_create_layer(x,y,"Tiros",obj_part_tiro1_inimigo3)
+					
+					//Velocidade do tiro
+					_tiro.speed = 2
+					
+					//Direção do tiro
+					_tiro.direction = _dir
+					
+					_tiro.image_angle = _dir + 90
 				}
-				
-				//Variável do tiro
-				var _tiro = instance_create_layer(x,y,"Tiros",obj_part_tiro1_inimigo3)
-				
-				//Velocidade do tiro
-				_tiro.speed = 2
-				
-				//Direção do tiro
-				_tiro.direction = _dir
-				
-				_tiro.image_angle = _dir + 90
-				
 			}
 			//Após atirar voltar a carregar se o contador não for maior que 3
 			if (contador < 3){
@@ -85,8 +90,12 @@ maquina_de_estado = function(){
 		
 		case "Atirando2": {
 			var _ang = 255;
-			//Criando o tiro 2
+			
+			efeito_som(sfx_laser2, .1)
+			
+			//Repetir a criação do tiro 3x
 			repeat(3){
+				//Criando o tiro 2
 				var _tiro2 = instance_create_layer(x,y,"Tiros",obj_part_tiro2_inimigo3)
 			
 				//Velocidade do tiro 2
@@ -117,18 +126,37 @@ maquina_de_estado = function(){
 			}
 				vspeed = -1
 				//Se destruindo após fugir
+				if y < -100 {
+					instance_destroy()
+				}
 		}
 		break
 	}
 }
 
-morrendo = function(){
+morrendo = function()
+{
+	//Fazendo o efeito squash
+	squash_stretch(1.5, .5)
+	
+	//Fazendo ficar branco
+	shadercolor(2)
+	
 	//Perder vida
-	if (vida > 1){
+	if (vida > 1)
+	{
 		vida--
-	} else {
+	} 
+	else 
+	{
 		instance_destroy()
 		instance_create_layer(x,y,"Particulas", obj_part_exp_inimigo)
+		
+		//Se eu me destruir eu tremo a tela
+		screenshake(20)
+		
+		//Som da explosão
+		efeito_som(sfx_explosion, .1)
 	}
 	//Se ele ficou sem vida ele se destroi
 	

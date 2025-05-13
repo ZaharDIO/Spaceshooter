@@ -1,5 +1,8 @@
 /// @description 
-
+//Parar de tocar todos os sons
+audio_stop_all()
+//Tocando a música do jogo
+audio_play_sound(musica_fundo, 0, 1)
 //VARIAVEIS
 #region variáveis
 	//Velocidade player
@@ -7,7 +10,7 @@
 	
 	//Cooldown tiro
 	timer_tiro = 0
-	cooldown = 45
+	cooldown = 10
 	
 	//Lvl Tiro
 	lvltiro = 1
@@ -24,6 +27,12 @@
 	
 	//TENHO ESCUDO
 	meu_escudo = noone
+	
+	//Variável para saber se o player levou dano
+	inicia_shadercolor()
+	
+	//Variável para desenhar a escala
+	inicia_squash_stretch()
 	
 #endregion
 
@@ -80,6 +89,11 @@ if keyboard_check_pressed(ord("E")){
 	//SE eu apertei a tecla de atirar
 	//E  timer do tiro está zerado
 	if (_atirar && timer_tiro <= 0){
+		//Som
+		audio_stop_sound(sfx_laser1)
+		efeito_som(sfx_laser1, .2)
+		//Mudando o tamanho do player
+		squash_stretch(.8, 1.2)
 		//SE o nivel do tiro for 1, chame o tiro 1
 		if (lvltiro == 1){
 			//CHAMANDO O METODO TIRO
@@ -104,7 +118,7 @@ tiro1 = function(){
 		var _tiro = instance_create_layer(x,y,"Tiros", obj_tiro)
 		
 		//Fazer o tiro ir pra frente
-		_tiro.speed = 5
+		//_tiro.speed = 5
 		_tiro.direction = 90
 }
 
@@ -113,12 +127,12 @@ tiro2 = function(){
 		//Salvar o ID do tiro
 		var _tiro = instance_create_layer(x-10,y,"Tiros", obj_tiro)
 		//Velocidade e direção do tiro
-		_tiro.speed = 5
+		//_tiro.speed = 5
 		_tiro.direction = 90
 		
 		var _tiro2 = instance_create_layer(x+10,y,"Tiros", obj_tiro)
 		//Velocidade e direção do tiro
-		_tiro2.speed = 5
+		//_tiro2.speed = 5
 		_tiro2.direction = 90
 }
 
@@ -154,15 +168,29 @@ drawico = function(_icone = spr_icovida, _qtd = 1, _y = 20){
 perdevida = function(){
 	//Se o timer de invencibilidade estiver valendo saia do evento de perder vidas
 	if (timer_invencivel > 0) return;
+	
+	//Levei dano me achato
+	squash_stretch(2, .5)
+	
+	//Levei dano aviso a variável que dano é verdadeiro
+	shadercolor(5)
+	
 	//Enquanto vidas for maior que 0
 	if (vidas > 0){
 			vidas--
 			//Invencibilidade após perder uma vida = 1 seg
 			timer_invencivel = timer_escudo
+			
+			//Levei dano a tela treme
+			screenshake(10)
 	//Quando vidas for menor que 0
 	} else {
 		//Destrua todas as instância do player
 		instance_destroy(obj_player)
+		//Crio a particula de explosão
+		instance_create_layer(x,y, "Particulas", obj_part_exp_player)
+		//Morri a tela treme
+		screenshake(50)
 	}
 }
 
@@ -173,6 +201,7 @@ usashield = function(){
 			//Atribuindo o objeto escudo a variável meu_escudo, para depois definir a posição dela
 			meu_escudo = instance_create_layer(x,y, "Shield", obj_shield)
 			shield--
+			efeito_som(sfx_shieldUp, 0)
 	}
 }
 	

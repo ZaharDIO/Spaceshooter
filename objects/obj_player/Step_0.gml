@@ -16,3 +16,6 @@ if keyboard_check_pressed(vk_up){
 if keyboard_check_pressed(vk_down){
 	lvltiro--
 }
+
+reset_squash_stretch(.3)
+reset_shadercolor()

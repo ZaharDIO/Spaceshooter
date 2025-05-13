@@ -1,7 +1,7 @@
 /// @description 
 
 //Se desenhando
-draw_self()
+desenha_shadercolor(desenha_squash_stretch)
 
 //Se apertar TAB global.debug = true
 if global.debug {
