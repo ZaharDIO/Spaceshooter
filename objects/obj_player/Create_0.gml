@@ -159,7 +159,7 @@ drawico = function(_icone = spr_icovida, _qtd = 1, _y = 20){
 	//com a quantidade de vidas
 	repeat(_qtd)
 	{
-		draw_sprite_ext(_icone, 0, 20 + _espaco, _y, 1, 1, 0, c_white, 0.5)
+		draw_sprite_ext(_icone, 0, 20 + _espaco, _y, 1, 1, 0, c_white, 1)
 		//Adicionando valor de espaço a cada repetição
 		_espaco += 30
 	}
@@ -185,6 +185,9 @@ perdevida = function(){
 			screenshake(10)
 	//Quando vidas for menor que 0
 	} else {
+		//Variável morte se torna verdadeira
+		global.morte = true
+		
 		//Destrua todas as instância do player
 		instance_destroy(obj_player)
 		//Crio a particula de explosão

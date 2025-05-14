@@ -16,10 +16,13 @@ ativa_menu = function()
 	{
 		//Jogar
 		case 0:
-			
+			global.destino = rm_jogo
+			change_room()
 		break
 		//Tutorial
 		case 1:
+			global.destino = rm_tutorial
+			change_room()
 		break
 		//Sair
 		case 2:
@@ -31,7 +34,7 @@ ativa_menu = function()
 controla_menu = function()
 {
 	//Sempre que eu apertar a setinha para baixo eu desço no menu
-	if (keyboard_check_pressed(vk_down))
+	if (keyboard_check_pressed(ord("S")))
 	{
 		atual++
 		efeito_som(sfx_zap, 0)
@@ -39,7 +42,7 @@ controla_menu = function()
 	}
 	
 	//Sempre que eu apertar a setinha para cima eu subo no menu
-	if (keyboard_check_pressed(vk_up))
+	if (keyboard_check_pressed(ord("W")))
 	{
 		atual--
 		efeito_som(sfx_zap, 0)

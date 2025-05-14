@@ -26,7 +26,6 @@ morrendo = function()
 	//Setando um valor aleatório de 0 a 100
 	var _chance = random(100)
 	//Tocando som
-	show_debug_message("morri")
 	efeito_som(sfx_explosion, .1)
 	//Criando o power up
 	//SE a chance for maior que 90

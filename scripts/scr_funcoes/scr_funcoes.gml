@@ -1,5 +1,12 @@
 #region globais
+	//Variável para saber se o player morreu
+	global.morte = false
+
 	global.debug = false
+	
+	//Definindo o destino dos botões
+	global.destino = rm_inicio
+	
 #endregion
 
 #region métodos globais (funções)
@@ -95,6 +102,12 @@
  {
 	var _pitch = random_range(1 - _variacao, 1 + _variacao)
 	audio_play_sound(_som, 0, 0, , ,_pitch)
+ }
+ 
+ //Função para mudar de room
+ function change_room()
+ {
+	room_goto(global.destino)
  }
 #endregion
 
